@@ -9,6 +9,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <title>NullBug Store</title>
+      </head>
       <body>
         <AppRouterCacheProvider>
           <StyledRoot>{children}</StyledRoot>

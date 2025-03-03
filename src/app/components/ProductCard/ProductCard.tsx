@@ -6,12 +6,14 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
+import ProductDetailsDialog from "../PoductDetailsDialog/PoductDetailsDialog";
 
 type ProductProps = {
   title: string;
   description: string;
   image: string;
   price: number;
+  category: string;
 };
 
 export function ProductCard({ ...props }: ProductProps) {
@@ -81,9 +83,13 @@ export function ProductCard({ ...props }: ProductProps) {
             padding: 0,
           }}
         >
-          <Button size="small" variant="outlined">
-            Detalhes
-          </Button>
+          <ProductDetailsDialog
+            image={props.image}
+            title={props.title}
+            description={props.description}
+            price={props.price}
+            category={props.category}
+          />
           <Button size="small" variant="outlined">
             Adicionar ao carrinho
           </Button>

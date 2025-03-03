@@ -10,7 +10,12 @@ type ProductProps = {
   image: string;
   description: string;
   price: number;
+  category: string;
 };
+
+function handleDetailsButtonClick() {
+  return;
+}
 
 export default function Home() {
   const [products, setProducts] = useState<ProductProps[]>([]);
@@ -21,7 +26,7 @@ export default function Home() {
       .then((data) => {
         setProducts(data);
       });
-  }, []);
+  });
 
   return (
     <Box>
@@ -44,6 +49,7 @@ export default function Home() {
             image={product.image}
             description={product.description}
             price={product.price}
+            category={product.category}
           />
         ))}
       </Container>
