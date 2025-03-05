@@ -1,6 +1,7 @@
 import "./globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { StyledRoot } from "./styledRoot";
+import { CartProvider } from "./components/Cart/CartContext";
 
 export default function RootLayout({
   children,
@@ -11,10 +12,13 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <title>NullBug Store</title>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body>
         <AppRouterCacheProvider>
-          <StyledRoot>{children}</StyledRoot>
+          <CartProvider>
+            <StyledRoot>{children}</StyledRoot>
+          </CartProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

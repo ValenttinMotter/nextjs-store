@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import ProductDetailsDialog from "../PoductDetailsDialog/PoductDetailsDialog";
+import CartContext from "../Cart/CartContext";
 
 type ProductProps = {
   title: string;
@@ -14,9 +15,14 @@ type ProductProps = {
   image: string;
   price: number;
   category: string;
+  onAddToCart: VoidFunction;
+  onRemoveOfCart: VoidFunction;
+  isOnCart: boolean;
 };
 
 export function ProductCard({ ...props }: ProductProps) {
+  const context = React.useContext(CartContext);
+
   return (
     <Card
       sx={{
@@ -74,7 +80,7 @@ export function ProductCard({ ...props }: ProductProps) {
         </Typography>
         <Box sx={{ mt: "auto" }}>
           <Typography variant="h6" color="text.primary">
-            US$ {props.price.toFixed(2)}
+            R$ {props.price.toFixed(2)}
           </Typography>
         </Box>
         <CardActions
@@ -89,8 +95,11 @@ export function ProductCard({ ...props }: ProductProps) {
             description={props.description}
             price={props.price}
             category={props.category}
+            onAddToCart={props.onAddToCart}
+            showRemoveButton={props.isOnCart}
+            onRemoveOfCart={props.onRemoveOfCart}
           />
-          <Button size="small" variant="outlined">
+          <Button size="small" variant="outlined" onClick={props.onAddToCart}>
             Adicionar ao carrinho
           </Button>
         </CardActions>

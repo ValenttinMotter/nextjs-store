@@ -2,10 +2,12 @@
 
 import { Box, Container } from "@mui/material";
 import { Header } from "./components/Header/Header";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ProductCard } from "./components/ProductCard/ProductCard";
+import CartContext from "./components/Cart/CartContext";
 
 type ProductProps = {
+  id: number;
   title: string;
   image: string;
   description: string;
@@ -13,12 +15,10 @@ type ProductProps = {
   category: string;
 };
 
-function handleDetailsButtonClick() {
-  return;
-}
-
 export default function Home() {
   const [products, setProducts] = useState<ProductProps[]>([]);
+
+  const context = useContext(CartContext);
 
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
@@ -26,7 +26,7 @@ export default function Home() {
       .then((data) => {
         setProducts(data);
       });
-  });
+  }, []);
 
   return (
     <Box>
@@ -43,15 +43,24 @@ export default function Home() {
           marginBottom: 3,
         }}
       >
-        {products.map((product) => (
-          <ProductCard
-            title={product.title}
-            image={product.image}
-            description={product.description}
-            price={product.price}
-            category={product.category}
-          />
-        ))}
+        {products.map((product) => {
+          const isProductInCart = (context?.cartProducts ?? []).some(
+            (item) => item.id === product.id
+          );
+          return (
+            <ProductCard
+              key={product.id}
+              title={product.title}
+              image={product.image}
+              description={product.description}
+              price={product.price}
+              category={product.category}
+              onAddToCart={() => context?.addProductToCart(product)}
+              onRemoveOfCart={() => context?.removeProductFromCart(product.id)}
+              isOnCart={isProductInCart}
+            />
+          );
+        })}
       </Container>
     </Box>
   );

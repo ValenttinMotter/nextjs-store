@@ -9,6 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { QuantitySelector } from "../QuantitySelector/QuantitySelector";
 import { Box, Chip, Typography } from "@mui/material";
+import CartContext from "../Cart/CartContext";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -25,6 +26,9 @@ type DetailsDialogProps = {
   description: string;
   price: number;
   category: string;
+  onAddToCart: VoidFunction;
+  onRemoveOfCart: VoidFunction;
+  showRemoveButton: boolean;
 };
 
 export default function ProductDetailsDialog({ ...props }: DetailsDialogProps) {
@@ -72,7 +76,6 @@ export default function ProductDetailsDialog({ ...props }: DetailsDialogProps) {
             gap: 1,
           }}
         >
-          {/* implementar a parada aqui */}
           <Box
             component="img"
             src={props.image}
@@ -101,10 +104,12 @@ export default function ProductDetailsDialog({ ...props }: DetailsDialogProps) {
         <DialogActions sx={{ justifyContent: "space-between" }}>
           <QuantitySelector />
           <Box>
-            <Button size="small" autoFocus>
-              remover do carrinho
-            </Button>
-            <Button size="small" autoFocus onClick={handleClose}>
+            {props.showRemoveButton && (
+              <Button size="small" autoFocus onClick={props.onRemoveOfCart}>
+                remover do carrinho
+              </Button>
+            )}
+            <Button size="small" autoFocus onClick={props.onAddToCart}>
               adicionar ao carrinho
             </Button>
           </Box>
