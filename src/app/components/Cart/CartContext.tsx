@@ -3,22 +3,24 @@
 import { Alert, Snackbar } from "@mui/material";
 import { createContext, useState } from "react";
 
-interface CartProduct {
+type CartProduct = {
   id: number;
   title: string;
   price: number;
-}
+  quantity: number;
+};
 
-interface CartContextProps {
+type CartContextProps = {
   children: React.ReactNode;
-}
+};
 
-interface CartContextValue {
+type CartContextValue = {
   cartProducts: CartProduct[];
   addProductToCart: (product: CartProduct) => void;
   removeProductFromCart: (id: number) => void;
+  updateProductQuantity: (id: number, quantity: number) => void;
   clearCart: () => void;
-}
+};
 
 const CartContext = createContext<CartContextValue | null>(null);
 
@@ -29,9 +31,22 @@ export const CartProvider = ({ children }: CartContextProps) => {
   const addProductToCart = (product: CartProduct) => {
     const isDuplicate = cartProducts.some((item) => item.id === product.id);
 
-    isDuplicate
-      ? setAlertOpen(true)
-      : setCartProducts([...cartProducts, product]);
+    if (isDuplicate) return setAlertOpen(true);
+
+    const newProduct: CartProduct = {
+      ...product,
+      quantity: 1,
+    };
+
+    setCartProducts((prevCartProducts) => [...prevCartProducts, newProduct]);
+  };
+
+  const updateProductQuantity = (id: number, quantity: number) => {
+    setCartProducts((prevCartProducts) =>
+      prevCartProducts.map((product) =>
+        product.id === id ? { ...product, quantity } : product
+      )
+    );
   };
 
   const removeProductFromCart = (id: number) => {
@@ -48,6 +63,7 @@ export const CartProvider = ({ children }: CartContextProps) => {
         cartProducts,
         addProductToCart,
         removeProductFromCart,
+        updateProductQuantity,
         clearCart,
       }}
     >

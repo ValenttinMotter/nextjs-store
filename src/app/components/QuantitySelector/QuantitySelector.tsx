@@ -1,33 +1,25 @@
-import React, { useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useState } from "react";
+import { useCart } from "@/app/hooks/useCart";
 
-export function QuantitySelector() {
-  const [quantity, setQuantity] = useState(1);
+type QuantitySelectorProps = {
+  productId: number;
+  quantity: number;
+};
 
-  const handleIncrement = () => {
-    setQuantity((prev) => prev + 1);
-  };
-
-  const handleDecrement = () => {
-    if (quantity > 1) {
-      setQuantity((prev) => prev - 1);
-    }
-  };
+export function QuantitySelector({ ...props }: QuantitySelectorProps) {
+  const { updateProductQuantity } = useCart();
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: 1,
-      }}
-    >
+    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
       <Button
         variant="outlined"
         size="small"
-        onClick={handleDecrement}
+        onClick={() =>
+          updateProductQuantity(props.productId, props.quantity - 1)
+        }
         sx={{
           borderRadius: "100%",
           minWidth: "unset",
@@ -39,19 +31,16 @@ export function QuantitySelector() {
       </Button>
       <Typography
         variant="body1"
-        sx={{
-          fontSize: "1.25rem",
-
-          textAlign: "center",
-          width: "20px",
-        }}
+        sx={{ fontSize: "1.25rem", textAlign: "center", width: "20px" }}
       >
-        {quantity}
+        {props.quantity}
       </Typography>
       <Button
         variant="outlined"
         size="small"
-        onClick={handleIncrement}
+        onClick={() =>
+          updateProductQuantity(props.productId, props.quantity + 1)
+        }
         sx={{
           borderRadius: "50%",
           minWidth: "unset",

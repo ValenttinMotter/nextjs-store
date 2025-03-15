@@ -4,13 +4,12 @@ import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Badge, Divider, Typography } from "@mui/material";
-import { Product } from "./components/Product/Product";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import CartContext from "./CartContext";
+import { useCart } from "@/app/hooks/useCart";
+import { ProductCart } from "./components/ProductCart/ProductCart";
 
 export default function Cart() {
-  const context = React.useContext(CartContext);
-
+  const { cartProducts, removeProductFromCart, clearCart } = useCart();
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -28,7 +27,6 @@ export default function Cart() {
         flex: 1,
       }}
       role="presentation"
-      onClick={toggleDrawer(false)}
     >
       <Typography
         sx={{
@@ -41,17 +39,19 @@ export default function Cart() {
         Carrinho de Compras
       </Typography>
       <Divider />
-      {context?.cartProducts.length !== 0 ? (
+      {cartProducts.length !== 0 ? (
         <React.Fragment>
-          {context?.cartProducts.map((product) => (
+          {cartProducts.map((product) => (
             <Box
               key={product.id}
               sx={{ flexDirection: "column", width: "100%" }}
             >
-              <Product
+              <ProductCart
+                id={product.id}
                 price={product.price}
                 title={product.title}
-                onRemove={() => context.removeProductFromCart(product.id)}
+                quantity={product.quantity}
+                onRemove={() => removeProductFromCart(product.id)}
               />
               <Divider />
             </Box>
@@ -65,13 +65,13 @@ export default function Cart() {
               padding: 1,
             }}
           >
-            <Button size="small" autoFocus onClick={context?.clearCart}>
+            <Button size="small" autoFocus onClick={clearCart}>
               Limpar carrinho
             </Button>
             <Typography>
               Valor total: R${" "}
-              {context?.cartProducts
-                .reduce((acc, curr) => acc + curr.price, 0)
+              {cartProducts
+                .reduce((acc, curr) => acc + curr.price * curr.quantity, 0)
                 .toFixed(2)}
             </Typography>
           </Box>
@@ -97,11 +97,16 @@ export default function Cart() {
   return (
     <div>
       <Button onClick={toggleDrawer(true)}>
-        <Badge badgeContent={context?.cartProducts.length} color="error">
+        <Badge badgeContent={cartProducts.length} color="error">
           <ShoppingCartIcon sx={{ color: "white" }} />
         </Badge>
       </Button>
-      <Drawer open={open} onClose={toggleDrawer(false)} anchor={"right"}>
+      <Drawer
+        open={open}
+        onClose={toggleDrawer(false)}
+        anchor={"right"}
+        ModalProps={{ keepMounted: true }}
+      >
         {DrawerList}
       </Drawer>
     </div>

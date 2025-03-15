@@ -2,31 +2,13 @@
 
 import { Box, Container } from "@mui/material";
 import { Header } from "./components/Header/Header";
-import { useContext, useEffect, useState } from "react";
-import { ProductCard } from "./components/ProductCard/ProductCard";
-import CartContext from "./components/Cart/CartContext";
-
-type ProductProps = {
-  id: number;
-  title: string;
-  image: string;
-  description: string;
-  price: number;
-  category: string;
-};
+import { Product } from "./components/Product/Product";
+import { useProducts } from "./hooks/useProducts";
+import { useCart } from "./hooks/useCart";
 
 export default function Home() {
-  const [products, setProducts] = useState<ProductProps[]>([]);
-
-  const context = useContext(CartContext);
-
-  useEffect(() => {
-    fetch("https://fakestoreapi.com/products")
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data);
-      });
-  }, []);
+  const products = useProducts();
+  const { cartProducts, addProductToCart, removeProductFromCart } = useCart();
 
   return (
     <Box>
@@ -44,19 +26,21 @@ export default function Home() {
         }}
       >
         {products.map((product) => {
-          const isProductInCart = (context?.cartProducts ?? []).some(
+          const isProductInCart = (cartProducts ?? []).some(
             (item) => item.id === product.id
           );
           return (
-            <ProductCard
+            <Product
+              id={product.id}
               key={product.id}
               title={product.title}
               image={product.image}
               description={product.description}
               price={product.price}
               category={product.category}
-              onAddToCart={() => context?.addProductToCart(product)}
-              onRemoveOfCart={() => context?.removeProductFromCart(product.id)}
+              quantity={product.quantity}
+              onAddToCart={() => addProductToCart(product)}
+              onRemoveOfCart={() => removeProductFromCart(product.id)}
               isOnCart={isProductInCart}
             />
           );

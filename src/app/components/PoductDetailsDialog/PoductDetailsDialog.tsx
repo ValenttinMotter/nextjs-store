@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { QuantitySelector } from "../QuantitySelector/QuantitySelector";
 import { Box, Chip, Typography } from "@mui/material";
-import CartContext from "../Cart/CartContext";
+import { useCart } from "@/app/hooks/useCart";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -21,11 +21,13 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 type DetailsDialogProps = {
+  id: number;
   title: string;
   image: string;
   description: string;
   price: number;
   category: string;
+  quantity: number;
   onAddToCart: VoidFunction;
   onRemoveOfCart: VoidFunction;
   showRemoveButton: boolean;
@@ -33,6 +35,8 @@ type DetailsDialogProps = {
 
 export default function ProductDetailsDialog({ ...props }: DetailsDialogProps) {
   const [open, setOpen] = React.useState(false);
+
+  const { updateProductQuantity } = useCart();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -102,7 +106,10 @@ export default function ProductDetailsDialog({ ...props }: DetailsDialogProps) {
           </Box>
         </DialogContent>
         <DialogActions sx={{ justifyContent: "space-between" }}>
-          <QuantitySelector />
+          <QuantitySelector
+            quantity={props.quantity}
+            onChange={() => updateProductQuantity(props.id, props.quantity)}
+          />
           <Box>
             {props.showRemoveButton && (
               <Button size="small" autoFocus onClick={props.onRemoveOfCart}>

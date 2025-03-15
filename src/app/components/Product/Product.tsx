@@ -7,22 +7,21 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import ProductDetailsDialog from "../PoductDetailsDialog/PoductDetailsDialog";
-import CartContext from "../Cart/CartContext";
 
 type ProductProps = {
+  id: number;
   title: string;
   description: string;
   image: string;
   price: number;
   category: string;
+  quantity: number;
   onAddToCart: VoidFunction;
   onRemoveOfCart: VoidFunction;
   isOnCart: boolean;
 };
 
-export function ProductCard({ ...props }: ProductProps) {
-  const context = React.useContext(CartContext);
-
+export function Product({ ...props }: ProductProps) {
   return (
     <Card
       sx={{
@@ -90,11 +89,13 @@ export function ProductCard({ ...props }: ProductProps) {
           }}
         >
           <ProductDetailsDialog
+            id={props.id}
             image={props.image}
             title={props.title}
             description={props.description}
             price={props.price}
             category={props.category}
+            quantity={props.quantity}
             onAddToCart={props.onAddToCart}
             showRemoveButton={props.isOnCart}
             onRemoveOfCart={props.onRemoveOfCart}

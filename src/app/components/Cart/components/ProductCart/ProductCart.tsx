@@ -1,13 +1,20 @@
 import { QuantitySelector } from "@/app/components/QuantitySelector/QuantitySelector";
 import { Box, Button, Typography } from "@mui/material";
+import { useProducts } from "@/app/hooks/useProducts";
+import { useCart } from "@/app/hooks/useCart";
 
 type ProductProps = {
+  id: number;
   title: string;
   price: number;
+  quantity: number;
   onRemove: VoidFunction;
 };
 
-export function Product({ ...props }: ProductProps) {
+export function ProductCart({ ...props }: ProductProps) {
+  const products = useProducts();
+  const { updateProductQuantity } = useCart();
+
   return (
     <Box
       sx={{
@@ -28,7 +35,7 @@ export function Product({ ...props }: ProductProps) {
         }}
       >
         <Typography>{props.title}</Typography>
-        <Typography>US$ {props.price.toFixed(2)}</Typography>
+        <Typography>US$ {(props.price * props.quantity).toFixed(2)}</Typography>
       </Box>
       <Box
         sx={{
@@ -43,7 +50,7 @@ export function Product({ ...props }: ProductProps) {
         <Button size="small" autoFocus onClick={props.onRemove}>
           remover
         </Button>
-        <QuantitySelector />
+        <QuantitySelector productId={props.id} quantity={props.quantity} />
       </Box>
     </Box>
   );
