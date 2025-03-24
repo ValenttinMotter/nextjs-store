@@ -35,18 +35,18 @@ export const CartProvider = ({ children }: CartContextProps) => {
 
     const newProduct: CartProduct = {
       ...product,
-      quantity: 1,
     };
 
     setCartProducts((prevCartProducts) => [...prevCartProducts, newProduct]);
   };
 
   const updateProductQuantity = (id: number, quantity: number) => {
-    setCartProducts((prevCartProducts) =>
-      prevCartProducts.map((product) =>
-        product.id === id ? { ...product, quantity } : product
-      )
-    );
+    quantity >= 1 &&
+      setCartProducts((prevCartProducts) =>
+        prevCartProducts.map((product) =>
+          product.id === id ? { ...product, quantity } : product
+        )
+      );
   };
 
   const removeProductFromCart = (id: number) => {

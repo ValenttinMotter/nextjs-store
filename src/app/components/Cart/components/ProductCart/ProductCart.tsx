@@ -50,7 +50,7 @@ export function ProductCart({ ...props }: ProductProps) {
         <Button size="small" autoFocus onClick={props.onRemove}>
           remover
         </Button>
-        <QuantitySelector productId={props.id} quantity={props.quantity} />
+        <QuantitySelector productId={props.id} />
       </Box>
     </Box>
   );

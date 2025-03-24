@@ -15,7 +15,6 @@ type ProductProps = {
   image: string;
   price: number;
   category: string;
-  quantity: number;
   onAddToCart: VoidFunction;
   onRemoveOfCart: VoidFunction;
   isOnCart: boolean;
@@ -95,7 +94,6 @@ export function Product({ ...props }: ProductProps) {
             description={props.description}
             price={props.price}
             category={props.category}
-            quantity={props.quantity}
             onAddToCart={props.onAddToCart}
             showRemoveButton={props.isOnCart}
             onRemoveOfCart={props.onRemoveOfCart}

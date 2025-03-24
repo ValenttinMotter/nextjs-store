@@ -27,16 +27,34 @@ type DetailsDialogProps = {
   description: string;
   price: number;
   category: string;
-  quantity: number;
-  onAddToCart: VoidFunction;
+  onAddToCart: (quantity: number) => void;
   onRemoveOfCart: VoidFunction;
   showRemoveButton: boolean;
 };
 
-export default function ProductDetailsDialog({ ...props }: DetailsDialogProps) {
-  const [open, setOpen] = React.useState(false);
+type CartProduct = {
+  id: number;
+  title: string;
+  price: number;
+  quantity: number;
+};
 
-  const { updateProductQuantity } = useCart();
+export default function ProductDetailsDialog({ ...props }: DetailsDialogProps) {
+  const { addProductToCart } = useCart();
+  const [open, setOpen] = React.useState(false);
+  const [selectedQuantity, setSelectedQuantity] = React.useState(1);
+
+  const handleAddToCart = () => {
+    const cartProduct: CartProduct = {
+      id: props.id,
+      title: props.title,
+      price: props.price,
+      quantity: selectedQuantity,
+    };
+    addProductToCart(cartProduct);
+    console.log(selectedQuantity);
+    handleClose();
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -107,8 +125,8 @@ export default function ProductDetailsDialog({ ...props }: DetailsDialogProps) {
         </DialogContent>
         <DialogActions sx={{ justifyContent: "space-between" }}>
           <QuantitySelector
-            quantity={props.quantity}
-            onChange={() => updateProductQuantity(props.id, props.quantity)}
+            productId={props.id}
+            onQuantityChange={(quantity) => setSelectedQuantity(quantity)}
           />
           <Box>
             {props.showRemoveButton && (
@@ -116,9 +134,11 @@ export default function ProductDetailsDialog({ ...props }: DetailsDialogProps) {
                 remover do carrinho
               </Button>
             )}
-            <Button size="small" autoFocus onClick={props.onAddToCart}>
-              adicionar ao carrinho
-            </Button>
+            {!props.showRemoveButton && (
+              <Button size="small" autoFocus onClick={() => handleAddToCart()}>
+                adicionar ao carrinho
+              </Button>
+            )}
           </Box>
         </DialogActions>
       </BootstrapDialog>

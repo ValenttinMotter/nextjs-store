@@ -38,7 +38,6 @@ export default function Home() {
               description={product.description}
               price={product.price}
               category={product.category}
-              quantity={product.quantity}
               onAddToCart={() => addProductToCart(product)}
               onRemoveOfCart={() => removeProductFromCart(product.id)}
               isOnCart={isProductInCart}
