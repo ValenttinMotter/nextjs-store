@@ -15,6 +15,7 @@ type ProductProps = {
   image: string;
   price: number;
   category: string;
+  quantity: number;
   onAddToCart: VoidFunction;
   onRemoveOfCart: VoidFunction;
   isOnCart: boolean;

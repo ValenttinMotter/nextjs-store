@@ -1,14 +1,20 @@
-"use client";
-
 import { Box, Container } from "@mui/material";
 import { Header } from "./components/Header/Header";
-import { Product } from "./components/Product/Product";
-import { useProducts } from "./hooks/useProducts";
-import { useCart } from "./hooks/useCart";
+import { getProducts } from "@/lib/getProducts";
+import { ProductList } from "./components/ProductList/ProductList";
 
-export default function Home() {
-  const products = useProducts();
-  const { cartProducts, addProductToCart, removeProductFromCart } = useCart();
+type ProductProps = {
+  id: number;
+  title: string;
+  image: string;
+  description: string;
+  price: number;
+  category: string;
+  quantity: number;
+};
+
+export default async function Home() {
+  const products: ProductProps[] = await getProducts();
 
   return (
     <Box>
@@ -25,25 +31,7 @@ export default function Home() {
           marginBottom: 3,
         }}
       >
-        {products.map((product) => {
-          const isProductInCart = (cartProducts ?? []).some(
-            (item) => item.id === product.id
-          );
-          return (
-            <Product
-              id={product.id}
-              key={product.id}
-              title={product.title}
-              image={product.image}
-              description={product.description}
-              price={product.price}
-              category={product.category}
-              onAddToCart={() => addProductToCart(product)}
-              onRemoveOfCart={() => removeProductFromCart(product.id)}
-              isOnCart={isProductInCart}
-            />
-          );
-        })}
+        <ProductList products={products} />
       </Container>
     </Box>
   );

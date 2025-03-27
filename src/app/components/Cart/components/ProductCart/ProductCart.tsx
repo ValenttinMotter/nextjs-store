@@ -1,7 +1,5 @@
 import { QuantitySelector } from "@/app/components/QuantitySelector/QuantitySelector";
 import { Box, Button, Typography } from "@mui/material";
-import { useProducts } from "@/app/hooks/useProducts";
-import { useCart } from "@/app/hooks/useCart";
 
 type ProductProps = {
   id: number;
@@ -12,9 +10,6 @@ type ProductProps = {
 };
 
 export function ProductCart({ ...props }: ProductProps) {
-  const products = useProducts();
-  const { updateProductQuantity } = useCart();
-
   return (
     <Box
       sx={{

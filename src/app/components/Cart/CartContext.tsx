@@ -33,8 +33,19 @@ export const CartProvider = ({ children }: CartContextProps) => {
 
     if (isDuplicate) return setAlertOpen(true);
 
+    const quantity = product.quantity;
+
+    if (quantity) {
+      const newProduct: CartProduct = {
+        ...product,
+      };
+      setCartProducts((prevCartProducts) => [...prevCartProducts, newProduct]);
+      return;
+    }
+
     const newProduct: CartProduct = {
       ...product,
+      quantity: 1,
     };
 
     setCartProducts((prevCartProducts) => [...prevCartProducts, newProduct]);
